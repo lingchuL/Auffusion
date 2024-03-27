@@ -369,7 +369,7 @@ def denormalize_spectrogram(
 
     return spectrogram
 
-@staticmethod
+# @staticmethod
 def pt_to_numpy(images: torch.FloatTensor) -> np.ndarray:
     """
     Convert a PyTorch tensor to a NumPy image.
@@ -377,7 +377,7 @@ def pt_to_numpy(images: torch.FloatTensor) -> np.ndarray:
     images = images.cpu().permute(0, 2, 3, 1).float().numpy()
     return images
 
-@staticmethod
+# @staticmethod
 def numpy_to_pil(images: np.ndarray) -> PIL.Image.Image:
     """
     Convert a numpy image or a batch of images to a PIL image.
@@ -742,6 +742,7 @@ class AuffusionPipeline(DiffusionPipeline):
                 )
             elif isinstance(negative_prompt, str):
                 negative_prompt = [negative_prompt]
+                negative_prompt_embeds = get_prompt_embeds(negative_prompt, device)
             elif batch_size != len(negative_prompt):
                 raise ValueError(
                     f"`negative_prompt`: {negative_prompt} has batch size {len(negative_prompt)}, but `prompt`:"
@@ -1023,7 +1024,7 @@ class AuffusionPipeline(DiffusionPipeline):
             spectrograms.append(spectrogram)
 
         # Convert to PIL
-        images = pt_to_numpy(image)    
+        images = pt_to_numpy(image)
         images = numpy_to_pil(images)
         images = [image_add_color(image) for image in images]
 
